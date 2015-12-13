@@ -19,7 +19,6 @@ static const NSUInteger unitCount = 2;
 @property (nonatomic, strong) NSOperationQueue* internalQueue;
 @end
 
-
 @implementation DownloadTaskOperation
 
 @synthesize finished = _finished;
@@ -32,18 +31,18 @@ static const NSUInteger unitCount = 2;
     if (self) {
         self.progress = [NSProgress progressWithTotalUnitCount:unitCount];
         self.internalQueue = [[NSOperationQueue alloc]init];
+         //create serial queue so we can show progress of each task, this could be concurrent
+        self.internalQueue.maxConcurrentOperationCount = 1;
     }
     return self;
 }
 
 - (void)start {
     
-
     NSLog(@"starting operation %@ with progress %@",self.name, self.progress);
     
     NSURLSession* session = [NSURLSession sharedSession];
-//    NSString* urlString = @"https://www.dropbox.com/s/uxlu4qpxgtjcwh8/257H.jpg?dl=1"; //large file
-    NSString* urlString = @"https://www.pexels.com/photo/night-fire-flame-fire-pit-21490/";
+    NSString* urlString = @"https://www.dropbox.com/s/uxlu4qpxgtjcwh8/257H.jpg?dl=1"; //large file
     NSURL *url = [NSURL URLWithString:urlString];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -59,11 +58,11 @@ static const NSUInteger unitCount = 2;
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         [self uploadData];
-        NSLog(@"operation %@ completed",self.name);
 
+        NSLog(@"operation %@ completed",self.name);
         self.finished = YES;
     }];
-    
+
     [downloadTask resume];
 }
 

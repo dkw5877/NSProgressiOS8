@@ -31,7 +31,6 @@ static const NSUInteger unitCount = 3;
     
     NSLog(@"starting parent operation");
     NSLog(@"progress %@", self.progress);
-    self.progress.kind = NSProgressKindFile;
     [self.progress setUserInfoObject:NSProgressFileOperationKindDownloading forKey:NSProgressFileOperationKindKey];
     
     /* create several download operations, each operation is one unit of work */
