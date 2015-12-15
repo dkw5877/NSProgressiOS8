@@ -11,11 +11,13 @@
 #import "AppDelegate.h"
 
 static const NSUInteger unitCount = 1;
+static NSString* const FinishedKey = @"isFinished";
+static NSString* const ExecutingKey = @"isExecuting";
 
 @interface UploadTaskOperation ()
 @property (nonatomic, strong) NSProgress* progress;
-@property (nonatomic, readwrite) BOOL finished;
-@property (nonatomic, readwrite) BOOL executing;
+@property (nonatomic, readwrite, getter=isFinished) BOOL finished;
+@property (nonatomic, readwrite, getter=isExecuting) BOOL executing;
 @property (nonatomic, strong) NSOperationQueue* internalQueue;
 @end
 
@@ -61,6 +63,31 @@ static const NSUInteger unitCount = 1;
     }];
 
     [downloadTask resume];
+}
+
+
+- (void)setExecuting:(BOOL)executing {
+    [self willChangeValueForKey:ExecutingKey];
+    _executing = executing;
+    [self didChangeValueForKey:ExecutingKey];
+}
+
+- (void)setFinished:(BOOL)finished {
+    [self willChangeValueForKey:FinishedKey];
+    _finished = finished;
+    [self didChangeValueForKey:FinishedKey];
+}
+
+- (BOOL)isExecuting {
+    return _executing;
+}
+
+- (BOOL)isFinished {
+    return _finished;
+}
+
+- (BOOL)isAsynchronous {
+    return YES;
 }
 
 @end
